@@ -1,6 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const initData = require("./data.js");
+const moreData = require("./moreData.js");
 const Listing = require("../models/listing.js");
 const User = require("../models/user.js");
 
@@ -36,8 +37,9 @@ const initDB = async () => {
     await Listing.deleteMany({});
 
     const defaultGeometry = { type: "Point", coordinates: [77.209, 28.6139] };
+    const combinedData = initData.data.concat(moreData);
 
-    const cleanedData = initData.data.map((obj) => {
+    const cleanedData = combinedData.map((obj) => {
       const item = { ...obj };
       delete item._id;
       delete item.__v;
