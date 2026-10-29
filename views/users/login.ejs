@@ -1,24 +1,141 @@
 <% layout("/layouts/boilerplate") %>
 
-    <body>
-        <div class="container mt-3">
-            <div class="row justify-content-center">
-                <div class="login-signup-form-inp">
-                    <h3 class="mb-3">Login on WanderLust</h3>
-                    <form action="/login" method="post" novalidate class="needs-validation">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="username"
-                                placeholder="Enter Username" required>
+<div class="auth-wrapper py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                <div class="card auth-card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <!-- Top Gradient Accent Bar -->
+                    <div class="auth-top-bar"></div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Brand & Header -->
+                        <div class="text-center mb-4">
+                            <div class="auth-icon-badge mb-3">
+                                <i class="fa-regular fa-compass"></i>
+                            </div>
+                            <h2 class="auth-title fw-bold">Welcome back</h2>
+                            <p class="text-muted small">Log in to explore extraordinary stays and experiences</p>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="Enter Password" required>
+
+                        <!-- One-Click Quick Fill Demo Account -->
+                        <div class="demo-account-box mb-4 p-3 rounded-3 bg-light border text-center">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="small fw-semibold text-secondary"><i class="fa-solid fa-bolt text-warning me-1"></i> Quick Demo Account</span>
+                                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2 rounded-pill" id="fillDemoBtn" style="font-size: 0.75rem;">
+                                    Auto-fill
+                                </button>
+                            </div>
+                            <p class="mb-0 text-muted" style="font-size: 0.8rem;">
+                                Username: <code class="text-dark">admin</code> &bull; Password: <code class="text-dark">admin123</code>
+                            </p>
                         </div>
-                        <button class="btn btn-success">Login</button>
-                    </form>
+
+                        <!-- Login Form -->
+                        <form action="/login" method="post" novalidate class="needs-validation" id="loginForm">
+                            <!-- Username Field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label small fw-semibold text-secondary">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <i class="fa-regular fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0 ps-1" name="username" id="username"
+                                        placeholder="Enter your username" required autofocus autocomplete="username">
+                                    <div class="invalid-feedback">Please enter your username.</div>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <label for="password" class="form-label small fw-semibold text-secondary mb-1">Password</label>
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0 border-end-0 ps-1" name="password" id="password"
+                                        placeholder="Enter your password" required autocomplete="current-password">
+                                    <button class="btn btn-outline-secondary border-start-0 bg-white text-muted" type="button" id="togglePasswordBtn">
+                                        <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                                    </button>
+                                    <div class="invalid-feedback">Please enter your password.</div>
+                                </div>
+                            </div>
+
+                            <!-- Remember & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
+                                </div>
+                                <a href="#" class="small text-decoration-none text-danger fw-semibold" onclick="alert('Password reset link sent to registered email.'); return false;">Forgot?</a>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-airbnb-gradient w-100 py-2 fw-semibold rounded-3 mb-3 shadow-sm">
+                                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Log in
+                            </button>
+
+                            <!-- Social Divider -->
+                            <div class="position-relative text-center my-4">
+                                <hr class="text-muted opacity-25">
+                                <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">or continue with</span>
+                            </div>
+
+                            <!-- Social Buttons -->
+                            <div class="row g-2 mb-4">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-dark w-100 py-2 rounded-3 small fw-medium d-flex align-items-center justify-content-center" onclick="alert('Google OAuth login enabled in production.')">
+                                        <i class="fa-brands fa-google text-danger me-2"></i> Google
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-dark w-100 py-2 rounded-3 small fw-medium d-flex align-items-center justify-content-center" onclick="alert('GitHub OAuth login enabled in production.')">
+                                        <i class="fa-brands fa-github me-2"></i> GitHub
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Footer Link -->
+                            <div class="text-center pt-2">
+                                <p class="text-muted small mb-0">
+                                    Don't have an account yet? 
+                                    <a href="/signup" class="text-danger fw-bold text-decoration-none ms-1">Sign up</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</div>
+
+<script>
+    // Toggle Password Visibility
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const passwordInput = document.getElementById('password');
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+    if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            togglePasswordIcon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        });
+    }
+
+    // Quick Fill Demo Account
+    const fillDemoBtn = document.getElementById('fillDemoBtn');
+    if (fillDemoBtn) {
+        fillDemoBtn.addEventListener('click', () => {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = 'admin123';
+            fillDemoBtn.innerHTML = '<i class="fa-solid fa-check"></i> Filled!';
+            setTimeout(() => {
+                fillDemoBtn.innerText = 'Auto-fill';
+            }, 1800);
+        });
+    }
+</script>

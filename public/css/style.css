@@ -543,3 +543,260 @@ body {
     height: 400px;
     width: 100%;
 }
+
+
+/* ========================================================
+   MODERN AIRBNB-INSPIRED ENHANCEMENTS
+   ======================================================== */
+
+/* --- Navbar Polish --- */
+.brand-icon {
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.search-form-pill {
+    border: 1px solid #e0e0e0;
+    border-radius: 40px;
+    padding: 3px 6px 3px 18px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.search-form-pill:hover,
+.search-form-pill:focus-within {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    border-color: #cccccc;
+}
+
+.search-inp {
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 17rem;
+    background: transparent !important;
+}
+
+.search-btn {
+    background-color: #fe424d !important;
+    color: #ffffff !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+}
+
+.search-btn:hover {
+    transform: scale(1.05);
+}
+
+.host-link {
+    color: #222222 !important;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.host-link:hover {
+    background-color: #f7f7f7 !important;
+}
+
+.user-menu-pill {
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    height: 42px !important;
+    transition: all 0.2s ease;
+}
+
+.user-menu-pill:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* --- Listing Cards Polish --- */
+.listing-img-container {
+    width: 100%;
+    aspect-ratio: 20 / 19;
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    background-color: #f1f3f5;
+}
+
+.listing-index-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.listing-card:hover .listing-index-img {
+    transform: scale(1.05);
+}
+
+.listing-card {
+    transition: transform 0.2s ease;
+}
+
+.heart-fav-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.heart-fav-btn:hover {
+    transform: scale(1.12);
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.heart-fav-btn.active {
+    color: #fe424d;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.listing-badge {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #222222;
+    font-size: 0.72rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    z-index: 2;
+}
+
+.listing-title {
+    font-size: 0.98rem;
+    color: #222222;
+}
+
+.listing-rating i {
+    color: #ffb703;
+}
+
+/* --- Category Filters Polish --- */
+.filter-icon {
+    font-size: 1.25rem;
+    margin-bottom: 0.35rem;
+    transition: transform 0.2s ease;
+}
+
+.filter:hover .filter-icon {
+    transform: translateY(-2px);
+    color: #fe424d;
+}
+
+.filter p {
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.filter:hover p {
+    color: #111827;
+}
+
+.scroll-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.scroll-btn:hover {
+    background: #ffffff;
+    border-color: #9ca3af;
+    transform: scale(1.08);
+}
+
+.tax-toggle {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.85rem;
+    background: #ffffff;
+    padding: 0.6rem 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.tax-toggle:hover {
+    border-color: #9ca3af;
+}
+
+/* --- Authentication (Login & Signup) Luxury Polish --- */
+.auth-wrapper {
+    background: linear-gradient(135deg, #fbfbfb 0%, #f4f6f8 100%);
+    min-height: calc(100vh - 12rem);
+    display: flex;
+    align-items: center;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 1.25rem !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid #edf2f7 !important;
+}
+
+.auth-top-bar {
+    height: 5px;
+    background: linear-gradient(90deg, #ff385c 0%, #e00b41 50%, #bd1e59 100%);
+}
+
+.auth-icon-badge {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    background: rgba(254, 66, 77, 0.1);
+    color: #fe424d;
+    font-size: 1.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.auth-title {
+    color: #222222;
+    letter-spacing: -0.5px;
+}
+
+.btn-airbnb-gradient {
+    background: linear-gradient(90deg, #ff385c 0%, #e00b41 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+}
+
+.btn-airbnb-gradient:hover {
+    background: linear-gradient(90deg, #e00b41 0%, #c90835 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(224, 11, 65, 0.35) !important;
+    color: #ffffff !important;
+}
+
+.btn-airbnb-gradient:active {
+    transform: translateY(0);
+}
+
+.demo-account-box {
+    background-color: #fafafa !important;
+    border: 1px dashed #d1d5db !important;
+}

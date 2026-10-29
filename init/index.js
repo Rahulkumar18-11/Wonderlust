@@ -2,18 +2,22 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
-const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
-const mapToken = process.env.MAP_TOKEN;
-const geoCodingClient = mbxGeocoding({ accessToken: mapToken });
+const User = require("../models/user.js");
 
 const mongoUrl = process.env.ATLASDB_URL;
 
 main()
   .then(() => {
     console.log("connected to DB");
+    return initDB();
+  })
+  .then(() => {
+    console.log("DB initialization completed successfully");
+    process.exit(0);
   })
   .catch((err) => {
-    console.log(err);
+    console.error("Initialization error:", err);
+    process.exit(1);
   });
 
 async function main() {
@@ -22,41 +26,33 @@ async function main() {
 
 const initDB = async () => {
   try {
+    let adminUser = await User.findOne({ username: "admin" });
+    if (!adminUser) {
+      const newUser = new User({ email: "admin@wanderlust.com", username: "admin" });
+      adminUser = await User.register(newUser, "admin123");
+      console.log("Created default admin user (username: admin, password: admin123)");
+    }
+
     await Listing.deleteMany({});
 
-    const updatedData = await Promise.all(
-      initData.data.map(async (obj) => {
-        let response;
-        try {
-          response = await geoCodingClient
-            .forwardGeocode({
-              query: `${obj.location}, ${obj.country}`,
-              limit: 1,
-            })
-            .send();
-        } catch (error) {
-          console.error(
-            `Geocoding failed for ${obj.location}, ${obj.country}:`,
-            error
-          );
-          return { ...obj, owner: "66567b03fda820235197b582", geometry: null };
-        }
+    const defaultGeometry = { type: "Point", coordinates: [77.209, 28.6139] };
 
-        const geometry = response.body.features[0].geometry || null;
+    const cleanedData = initData.data.map((obj) => {
+      const item = { ...obj };
+      delete item._id;
+      delete item.__v;
+      item.reviews = [];
+      item.owner = adminUser._id;
+      if (!item.geometry || !item.geometry.coordinates || item.geometry.coordinates.length !== 2) {
+        item.geometry = defaultGeometry;
+      }
+      return item;
+    });
 
-        return {
-          ...obj,
-          owner: "66567b03fda820235197b582",
-          geometry,
-        };
-      })
-    );
-
-    await Listing.insertMany(updatedData);
-    console.log("DB is initialized");
+    await Listing.insertMany(cleanedData);
+    console.log(`DB is initialized with ${cleanedData.length} listings!`);
   } catch (error) {
     console.error("Error initializing DB:", error);
+    throw error;
   }
 };
-
-initDB();

@@ -1,30 +1,81 @@
 <% layout("/layouts/boilerplate") %>
 
-    <body>
-        <div class="container mt-3">
-            <div class="row justify-content-center">
-                <div class="login-signup-form-inp">
-                    <h3 class="mb-3">Signup on WanderLust</h3>
-                    <form action="/signup" method="post" novalidate class="needs-validation">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="username"
-                                placeholder="Enter Username" required>
-                            <div class="valid-feedback">Looks good!</div>
+<div class="auth-wrapper py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                <div class="card auth-card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <!-- Top Gradient Accent Bar -->
+                    <div class="auth-top-bar"></div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Brand & Header -->
+                        <div class="text-center mb-4">
+                            <div class="auth-icon-badge mb-3">
+                                <i class="fa-regular fa-compass"></i>
+                            </div>
+                            <h2 class="auth-title fw-bold">Create an account</h2>
+                            <p class="text-muted small">Join WanderLust to discover places you'll love</p>
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="Enter Password" required>
-                        </div>
-                        <button class="btn btn-success">SignUp</button>
-                    </form>
+
+                        <!-- Signup Form -->
+                        <form action="/signup" method="post" novalidate class="needs-validation">
+                            <!-- Username Field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label small fw-semibold text-secondary">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <i class="fa-regular fa-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0 ps-1" name="username" id="username"
+                                        placeholder="Choose a username" required autocomplete="username">
+                                    <div class="invalid-feedback">Please choose a username.</div>
+                                </div>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label small fw-semibold text-secondary">Email address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <i class="fa-regular fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control border-start-0 ps-1" name="email" id="email"
+                                        placeholder="name@example.com" required autocomplete="email">
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label small fw-semibold text-secondary">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0 ps-1" name="password" id="password"
+                                        placeholder="Create a strong password" required autocomplete="new-password">
+                                    <div class="invalid-feedback">Please provide a password.</div>
+                                </div>
+                                <div class="form-text text-muted small" style="font-size: 0.75rem;">Must be at least 6 characters.</div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-airbnb-gradient w-100 py-2 fw-semibold rounded-3 mb-3 shadow-sm">
+                                <i class="fa-solid fa-user-plus me-2"></i> Sign up
+                            </button>
+
+                            <!-- Footer Link -->
+                            <div class="text-center pt-2">
+                                <p class="text-muted small mb-0">
+                                    Already have an account? 
+                                    <a href="/login" class="text-danger fw-bold text-decoration-none ms-1">Log in</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</div>

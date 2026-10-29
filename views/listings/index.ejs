@@ -1,166 +1,186 @@
 <% layout("/layouts/boilerplate") %>
 
-    <body>
-        <div id="filter-wrapper">
-            <button class="scroll-btn left-btn"><i class="fa-solid fa-less-than"></i></button>
-            <div id="filters-container">
-                <div id="filters">
-                    <div class="filter">
-                        <a href="/listings/filter/Rooms">
-                            <div><i class="fa-solid fa-bed"></i></div>
-                            <p>Rooms</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Iconic-Cities">
-                            <div><i class="fa-solid fa-mountain-city"></i></div>
-                            <p>Iconic Cities</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Trending">
-                            <div><i class="fa-solid fa-fire"></i></div>
-                            <p>Trending</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Mountains">
-                            <div><i class="fa-solid fa-mountain-sun"></i></div>
-                            <p>Mountains</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Castles">
-                            <div><i class="fa-brands fa-fort-awesome"></i></div>
-                            <p>Castles</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Amazing-Pools">
-                            <div><i class="fa-solid fa-person-swimming"></i></div>
-                            <p>Amazing Pools</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Camping">
-                            <div><i class="fa-solid fa-campground"></i></div>
-                            <p>Camping</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Farm">
-                            <div><i class="fa-solid fa-cow"></i></div>
-                            <p>Farm</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Arctic">
-                            <div><i class="fa-solid fa-snowflake"></i></div>
-                            <p>Arctic</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Beach">
-                            <div><i class="fa-solid fa-umbrella-beach"></i></div>
-                            <p>Beach</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Boat">
-                            <div><i class="fa-solid fa-sailboat"></i></div>
-                            <p>Boat</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Ski-in-out">
-                            <div><i class="fa-solid fa-person-snowboarding"></i></div>
-                            <p>Ski-in/out</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Apartment">
-                            <div><i class="fa-solid fa-building"></i></div>
-                            <p>Apartment</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/New">
-                            <div><i class="fa-solid fa-key"></i></div>
-                            <p>New</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Woodlands">
-                            <div><i class="fa-solid fa-tree-city"></i></div>
-                            <p>Woodlands</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Lake">
-                            <div><i class="fa-solid fa-water"></i></div>
-                            <p>Lake</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Cabins">
-                            <div><i class="fa-solid fa-house"></i></div>
-                            <p>Cabins</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Countryside">
-                            <div><i class="fa-solid fa-house-chimney-window"></i></div>
-                            <p>Countryside</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Bed-and-Breakfasts">
-                            <div><i class="fa-solid fa-mug-hot"></i></div>
-                            <p>Bed & Breakfasts</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Campsite">
-                            <div><i class="fa-solid fa-tents"></i></div>
-                            <p>Campsite</p>
-                        </a>
-                    </div>
-                    <div class="filter">
-                        <a href="/listings/filter/Historical-Homes">
-                            <div><i class="fa-solid fa-landmark"></i></div>
-                            <p>Historical Homes</p>
-                        </a>
-                    </div>
+<body>
+    <!-- Category Filter Bar -->
+    <div id="filter-wrapper" class="py-3">
+        <button class="scroll-btn left-btn" aria-label="Scroll left"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="filters-container">
+            <div id="filters">
+                <div class="filter">
+                    <a href="/listings/filter/Trending">
+                        <div class="filter-icon"><i class="fa-solid fa-fire"></i></div>
+                        <p>Trending</p>
+                    </a>
                 </div>
-            </div>
-            <button class="scroll-btn right-btn"><i class="fa-solid fa-greater-than"></i></button>
-            <div class="tax-toggle">
-                <div class="toggle-container">
-                    <div class="form-check-reverse form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
-                    </div>
+                <div class="filter">
+                    <a href="/listings/filter/Beach">
+                        <div class="filter-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                        <p>Beach</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Iconic-Cities">
+                        <div class="filter-icon"><i class="fa-solid fa-mountain-city"></i></div>
+                        <p>Iconic Cities</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Mountains">
+                        <div class="filter-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                        <p>Mountains</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Castles">
+                        <div class="filter-icon"><i class="fa-brands fa-fort-awesome"></i></div>
+                        <p>Castles</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Amazing-Pools">
+                        <div class="filter-icon"><i class="fa-solid fa-person-swimming"></i></div>
+                        <p>Amazing Pools</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Rooms">
+                        <div class="filter-icon"><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Camping">
+                        <div class="filter-icon"><i class="fa-solid fa-campground"></i></div>
+                        <p>Camping</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Farm">
+                        <div class="filter-icon"><i class="fa-solid fa-cow"></i></div>
+                        <p>Farm</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Arctic">
+                        <div class="filter-icon"><i class="fa-solid fa-snowflake"></i></div>
+                        <p>Arctic</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Boat">
+                        <div class="filter-icon"><i class="fa-solid fa-sailboat"></i></div>
+                        <p>Boat</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Ski-in-out">
+                        <div class="filter-icon"><i class="fa-solid fa-person-snowboarding"></i></div>
+                        <p>Ski-in/out</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Apartment">
+                        <div class="filter-icon"><i class="fa-solid fa-building"></i></div>
+                        <p>Apartment</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Cabins">
+                        <div class="filter-icon"><i class="fa-solid fa-house"></i></div>
+                        <p>Cabins</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Countryside">
+                        <div class="filter-icon"><i class="fa-solid fa-house-chimney-window"></i></div>
+                        <p>Countryside</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Lake">
+                        <div class="filter-icon"><i class="fa-solid fa-water"></i></div>
+                        <p>Lake</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Bed-and-Breakfasts">
+                        <div class="filter-icon"><i class="fa-solid fa-mug-hot"></i></div>
+                        <p>B & B</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/listings/filter/Historical-Homes">
+                        <div class="filter-icon"><i class="fa-solid fa-landmark"></i></div>
+                        <p>Historical</p>
+                    </a>
                 </div>
             </div>
         </div>
+        <button class="scroll-btn right-btn" aria-label="Scroll right"><i class="fa-solid fa-chevron-right"></i></button>
+        
+        <!-- Tax Toggle Switch -->
+        <div class="tax-toggle shadow-sm">
+            <div class="toggle-container">
+                <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+                    <label class="form-check-label small fw-semibold" for="flexSwitchCheckDefault">Display total after taxes</label>
+                    <input class="form-check-input ms-0" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="row row-cols-lg-4 row-cols-adjust">
-            <% for(let listing of allListings) { %>
-                <a href="/listings/<%= listing._id%>" class="listing-link" style="text-decoration: none;">
-                    <div class="card col listing-card">
-                        <img src="<%= listing.image.url%>" class="card-img-top listing-index-img" alt="listing-img">
-                        <div class="card-img-overlay"></div>
-                        <div class="listing-card-body">
-                            <p class="listing-card-text">
-                                <b>
-                                    <%= listing.title%>
-                                </b> <br> &#8377;
-                                <%= listing.price ? listing.price.toLocaleString("en-IN") : "Price not available" %> / night
-                                    <i class="tax-info">&nbsp; &nbsp; + 18% GST</i>
+    <!-- Listings Grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-1 mb-5">
+        <% for(let listing of allListings) { %>
+            <div class="col">
+                <a href="/listings/<%= listing._id%>" class="listing-link text-decoration-none text-dark">
+                    <div class="card listing-card h-100 border-0">
+                        <!-- Image Container with Hover and Heart Button -->
+                        <div class="listing-img-container position-relative overflow-hidden rounded-4">
+                            <img src="<%= listing.image.url%>" class="card-img-top listing-index-img" alt="<%= listing.title %>" loading="lazy">
+                            
+                            <!-- Floating Heart Icon -->
+                            <button type="button" class="heart-fav-btn" aria-label="Add to wishlist" onclick="event.preventDefault(); this.classList.toggle('active');">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+
+                            <!-- Category / Guest Favorite Badge -->
+                            <% if(listing.category) { %>
+                                <div class="listing-badge position-absolute top-0 start-0 m-3 px-2 py-1 rounded-pill small fw-semibold">
+                                    <%= listing.category %>
+                                </div>
+                            <% } else { %>
+                                <div class="listing-badge position-absolute top-0 start-0 m-3 px-2 py-1 rounded-pill small fw-semibold">
+                                    ★ Guest favourite
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <!-- Card Body Details -->
+                        <div class="listing-card-body pt-2 px-1">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <h6 class="listing-title mb-0 fw-bold text-truncate pe-2">
+                                    <%= listing.title %>
+                                </h6>
+                                <span class="listing-rating small fw-semibold d-flex align-items-center">
+                                    <i class="fa-solid fa-star text-warning me-1" style="font-size: 0.75rem;"></i>4.9
+                                </span>
+                            </div>
+
+                            <p class="text-secondary small mb-1 text-truncate">
+                                <i class="fa-solid fa-location-dot me-1" style="font-size: 0.8rem; color: #fe424d;"></i>
+                                <%= listing.location %>, <%= listing.country %>
                             </p>
+
+                            <div class="listing-price-box mt-1">
+                                <span class="fw-bold fs-6">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : "Contact for price" %></span>
+                                <span class="text-secondary small"> / night</span>
+                                <span class="tax-info text-danger small fw-semibold ms-1">(incl. 18% GST)</span>
+                            </div>
                         </div>
                     </div>
                 </a>
-                <% } %>
-        </div>
-    </body>
+            </div>
+        <% } %>
+    </div>
+</body>

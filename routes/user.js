@@ -15,11 +15,28 @@ router
   .get(userController.renderLoginForm)
   .post(
     saveRedirectUrl,
-    passport.authenticate("local", {
-      failureRedirect: "/login",
-      failureFlash: true,
-    }),
-    userController.login
+    (req, res, next) => {
+      console.log(`🔐 [AUTH CHECK] Login attempt for username: "${req.body.username}"`);
+      passport.authenticate("local", (err, user, info) => {
+        if (err) {
+          console.error("❌ [AUTH ERROR] Authentication error:", err);
+          return next(err);
+        }
+        if (!user) {
+          console.warn(`⚠️  [AUTH FAILED] Failed login for user: "${req.body.username}". Reason: ${info?.message || "Invalid credentials"}`);
+          req.flash("error", info ? info.message : "Invalid username or password!");
+          return res.redirect("/login");
+        }
+        req.login(user, (err) => {
+          if (err) {
+            console.error("❌ [LOGIN ERROR] Error logging in user:", err);
+            return next(err);
+          }
+          console.log(`✅ [AUTH SUCCESS] User "${user.username}" authenticated successfully!`);
+          return userController.login(req, res);
+        });
+      })(req, res, next);
+    }
   );
 
 router.get("/logout", userController.logout);
