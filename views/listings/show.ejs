@@ -215,8 +215,9 @@
                             <div class="mb-3">
                                 <label class="form-label small fw-semibold text-secondary" for="rating">Rating</label>
                                 <fieldset class="starability-slot">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="5" checked aria-label="No rating." />
                                     <% for (let i = 1; i <= 5; i++) { %>
-                                        <input type="radio" id="rate<%= i %>" name="review[rating]" value="<%= i %>" <%= i === 5 ? 'checked' : '' %> />
+                                        <input type="radio" id="rate<%= i %>" name="review[rating]" value="<%= i %>" />
                                         <label for="rate<%= i %>" title="<%= i %> stars"><%= i %> star</label>
                                     <% } %>
                                 </fieldset>

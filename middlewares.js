@@ -43,7 +43,8 @@ module.exports.validateListing = (req, res, next) => {
   if (error) {
     console.warn("⚠️  [VALIDATION ERROR] Listing schema validation failed:", error.message);
     let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
+    req.flash("error", errMsg);
+    return res.redirect(req.get("Referrer") || "/listings");
   } else {
     next();
   }
@@ -54,7 +55,8 @@ module.exports.validateReview = (req, res, next) => {
   if (error) {
     console.warn("⚠️  [VALIDATION ERROR] Review schema validation failed:", error.message);
     let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(400, errMsg);
+    req.flash("error", errMsg);
+    return res.redirect(`/listings/${req.params.id}`);
   } else {
     next();
   }
