@@ -1,98 +1,188 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="auth-wrapper py-5">
+<div class="auth-wrapper py-4 py-md-5">
     <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
-                <div class="card auth-card shadow-lg border-0 rounded-4 overflow-hidden">
-                    <!-- Top Gradient Accent Bar -->
-                    <div class="auth-top-bar"></div>
+        <!-- Back to Listings Navigation -->
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 col-xl-10">
+                <a href="/listings" class="text-decoration-none text-muted small d-inline-flex align-items-center">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Back to Explore
+                </a>
+            </div>
+        </div>
 
-                    <div class="card-body p-4 p-md-5">
-                        <!-- Brand & Header -->
-                        <div class="text-center mb-4">
-                            <div class="auth-icon-badge mb-3">
-                                <i class="fa-regular fa-compass"></i>
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <div class="card auth-dual-card border-0">
+                    <div class="row g-0">
+                        <!-- Left Column: Travel Hero Showcase (Visible on lg and above) -->
+                        <div class="col-lg-6 d-none d-lg-block position-relative">
+                            <div class="auth-hero-banner" style="background-image: url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80');">
+                                <div class="auth-hero-overlay"></div>
+                                <div class="auth-hero-content d-flex flex-column justify-content-between h-100">
+                                    <!-- Brand Tag -->
+                                    <div>
+                                        <div class="d-inline-flex align-items-center gap-2 bg-white bg-opacity-25 px-3 py-1 rounded-pill text-white small fw-semibold mb-4">
+                                            <i class="fa-regular fa-compass"></i> WanderLust Travel
+                                        </div>
+                                        <h2 class="display-6 fw-bold text-white mb-3" style="letter-spacing: -0.5px;">
+                                            Discover places you'll remember forever.
+                                        </h2>
+                                        <p class="text-white-50 mb-4" style="font-size: 0.95rem; line-height: 1.6;">
+                                            Join over 250,000 travelers booking verified beach retreats, mountain chalets, and historic city stays worldwide.
+                                        </p>
+
+                                        <!-- Trust Badges -->
+                                        <div class="d-flex flex-column gap-2 mb-4">
+                                            <div class="d-flex align-items-center text-white small">
+                                                <i class="fa-solid fa-circle-check text-warning me-2"></i> Hand-verified luxury & budget listings
+                                            </div>
+                                            <div class="d-flex align-items-center text-white small">
+                                                <i class="fa-solid fa-circle-check text-warning me-2"></i> Real-time GPS distance & instant booking
+                                            </div>
+                                            <div class="d-flex align-items-center text-white small">
+                                                <i class="fa-solid fa-circle-check text-warning me-2"></i> Multiple secure payment options
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Floating Testimonial Card -->
+                                    <div class="auth-glass-card shadow-sm mt-auto">
+                                        <div class="d-flex align-items-center text-warning small mb-2">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <span class="text-white ms-2 fw-semibold">5.0 / 5.0</span>
+                                        </div>
+                                        <p class="small text-white-50 mb-2 fst-italic">
+                                            "Booked a beachfront stay in Goa through WanderLust. The distance tracker and instant confirmation voucher were incredible!"
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-white text-danger fw-bold rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                                AR
+                                            </div>
+                                            <span class="small fw-semibold text-white">Ananya Rao · Verified Traveler</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <h2 class="auth-title fw-bold">Welcome back</h2>
-                            <p class="text-muted small">Log in to explore extraordinary stays and experiences</p>
                         </div>
 
-                        <!-- Login Form -->
-                        <form action="/login" method="post" novalidate class="needs-validation" id="loginForm">
-                            <!-- Username Field -->
-                            <div class="mb-3">
-                                <label for="username" class="form-label small fw-semibold text-secondary">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0 text-muted">
-                                        <i class="fa-regular fa-user"></i>
+                        <!-- Right Column: Login Form -->
+                        <div class="col-12 col-lg-6">
+                            <div class="auth-form-side h-100 d-flex flex-column justify-content-center">
+                                <!-- Form Header -->
+                                <div class="mb-4">
+                                    <div class="auth-icon-badge mb-3">
+                                        <i class="fa-regular fa-compass"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" style="color: #0f172a; letter-spacing: -0.5px;">Welcome back</h3>
+                                    <p class="text-muted small mb-0">Enter your credentials to access your WanderLust account</p>
+                                </div>
+
+                                <!-- Quick Test Credentials Pill Bar -->
+                                <div class="d-flex align-items-center gap-2 mb-4 p-2 rounded-3 bg-light border">
+                                    <span class="text-muted small fw-semibold">
+                                        <i class="fa-solid fa-bolt text-warning me-1"></i> Quick Test:
                                     </span>
-                                    <input type="text" class="form-control border-start-0 ps-1" name="username" id="username"
-                                        placeholder="Enter your username" required autofocus autocomplete="username">
-                                    <div class="invalid-feedback">Please enter your username.</div>
-                                </div>
-                            </div>
-
-                            <!-- Password Field -->
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <label for="password" class="form-label small fw-semibold text-secondary mb-1">Password</label>
-                                </div>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0 text-muted">
-                                        <i class="fa-solid fa-lock"></i>
-                                    </span>
-                                    <input type="password" class="form-control border-start-0 border-end-0 ps-1" name="password" id="password"
-                                        placeholder="Enter your password" required autocomplete="current-password">
-                                    <button class="btn btn-outline-secondary border-start-0 bg-white text-muted" type="button" id="togglePasswordBtn">
-                                        <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                                    <button type="button" class="auth-quick-pill" id="fillAdminBtn" title="Fill admin demo login">
+                                        Admin Demo
                                     </button>
-                                    <div class="invalid-feedback">Please enter your password.</div>
-                                </div>
-                            </div>
-
-                            <!-- Remember & Forgot Password -->
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                                    <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
-                                </div>
-                                <a href="#" class="small text-decoration-none text-danger fw-semibold" onclick="alert('Password reset link sent to registered email.'); return false;">Forgot?</a>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <button type="submit" class="btn btn-airbnb-gradient w-100 py-2 fw-semibold rounded-3 mb-3 shadow-sm">
-                                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Log in
-                            </button>
-
-                            <!-- Social Divider -->
-                            <div class="position-relative text-center my-4">
-                                <hr class="text-muted opacity-25">
-                                <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">or continue with</span>
-                            </div>
-
-                            <!-- Social Buttons -->
-                            <div class="row g-2 mb-4">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-outline-dark w-100 py-2 rounded-3 small fw-medium d-flex align-items-center justify-content-center" onclick="alert('Google OAuth login enabled in production.')">
-                                        <i class="fa-brands fa-google text-danger me-2"></i> Google
+                                    <button type="button" class="auth-quick-pill" id="clearBtn" title="Clear inputs">
+                                        Clear
                                     </button>
                                 </div>
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-outline-dark w-100 py-2 rounded-3 small fw-medium d-flex align-items-center justify-content-center" onclick="alert('GitHub OAuth login enabled in production.')">
-                                        <i class="fa-brands fa-github me-2"></i> GitHub
-                                    </button>
-                                </div>
-                            </div>
 
-                            <!-- Footer Link -->
-                            <div class="text-center pt-2">
-                                <p class="text-muted small mb-0">
-                                    Don't have an account yet? 
-                                    <a href="/signup" class="text-danger fw-bold text-decoration-none ms-1">Sign up</a>
-                                </p>
+                                <!-- Login Form -->
+                                <form action="/login" method="post" novalidate class="needs-validation" id="loginForm">
+                                    <!-- Username -->
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label small fw-semibold text-secondary">Username</label>
+                                        <div class="input-group auth-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa-regular fa-user"></i>
+                                            </span>
+                                            <input type="text" class="form-control" name="username" id="username"
+                                                placeholder="Enter username" required autofocus autocomplete="username">
+                                            <div class="invalid-feedback">Please enter your username.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <label for="password" class="form-label small fw-semibold text-secondary mb-0">Password</label>
+                                            <a href="#" class="small text-danger fw-semibold text-decoration-none" onclick="alert('Password reset instructions will be sent to your registered email.'); return false;">
+                                                Forgot password?
+                                            </a>
+                                        </div>
+                                        <div class="input-group auth-input-group">
+                                            <span class="input-group-text">
+                                                <i class="fa-solid fa-lock"></i>
+                                            </span>
+                                            <input type="password" class="form-control" name="password" id="password"
+                                                placeholder="Enter password" required autocomplete="current-password">
+                                            <button class="btn btn-outline-secondary password-toggle-btn" type="button" id="togglePasswordBtn">
+                                                <i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+                                            </button>
+                                            <div class="invalid-feedback">Please enter your password.</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Remember Me -->
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label small text-muted" for="rememberMe">
+                                            Keep me logged in on this device
+                                        </label>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-airbnb-gradient w-100 py-2p5 fw-bold rounded-3 mb-3 shadow-sm">
+                                        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Log in to Account
+                                    </button>
+
+                                    <!-- Social Auth Divider -->
+                                    <div class="position-relative text-center my-4">
+                                        <hr class="text-muted opacity-25">
+                                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">
+                                            or continue with
+                                        </span>
+                                    </div>
+
+                                    <!-- Social Auth Buttons -->
+                                    <div class="row g-2 mb-4">
+                                        <div class="col-6">
+                                            <button type="button" class="btn social-auth-btn w-100" onclick="alert('Google authentication is connected in production.')">
+                                                <i class="fa-brands fa-google text-danger me-2"></i> Google
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="button" class="btn social-auth-btn w-100" onclick="alert('GitHub authentication is connected in production.')">
+                                                <i class="fa-brands fa-github me-2"></i> GitHub
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Switch to Sign Up -->
+                                    <div class="text-center pt-2 border-top">
+                                        <p class="text-muted small mb-0 mt-3">
+                                            Don't have an account yet? 
+                                            <a href="/signup" class="text-danger fw-bold text-decoration-none ms-1">Sign up for free</a>
+                                        </p>
+                                    </div>
+
+                                    <!-- Trust & Encryption Badge -->
+                                    <div class="text-center mt-3">
+                                        <span class="text-muted" style="font-size: 0.75rem;">
+                                            <i class="fa-solid fa-shield-halved text-success me-1"></i> 256-bit SSL encrypted connection
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,7 +191,7 @@
 </div>
 
 <script>
-    // Toggle Password Visibility
+    // Password show/hide toggle
     const togglePasswordBtn = document.getElementById('togglePasswordBtn');
     const passwordInput = document.getElementById('password');
     const togglePasswordIcon = document.getElementById('togglePasswordIcon');
@@ -110,6 +200,25 @@
             const isPassword = passwordInput.getAttribute('type') === 'password';
             passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
             togglePasswordIcon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        });
+    }
+
+    // Quick fill helper for testing/demonstrations
+    const fillAdminBtn = document.getElementById('fillAdminBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const usernameInput = document.getElementById('username');
+
+    if (fillAdminBtn) {
+        fillAdminBtn.addEventListener('click', () => {
+            usernameInput.value = 'admin';
+            passwordInput.value = 'admin123';
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            usernameInput.value = '';
+            passwordInput.value = '';
         });
     }
 </script>

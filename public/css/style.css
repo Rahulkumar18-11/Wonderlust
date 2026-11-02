@@ -740,40 +740,148 @@ body {
 
 /* --- Authentication (Login & Signup) Luxury Polish --- */
 .auth-wrapper {
-    background: linear-gradient(135deg, #fbfbfb 0%, #f4f6f8 100%);
+    background: radial-gradient(circle at 10% 20%, rgba(254, 66, 77, 0.04) 0%, rgba(248, 250, 252, 0.95) 90%);
     min-height: calc(100vh - 12rem);
     display: flex;
     align-items: center;
+    padding: 2.5rem 0;
 }
 
-.auth-card {
+.auth-dual-card {
     background: #ffffff;
-    border-radius: 1.25rem !important;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08) !important;
-    border: 1px solid #edf2f7 !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.auth-top-bar {
-    height: 5px;
-    background: linear-gradient(90deg, #ff385c 0%, #e00b41 50%, #bd1e59 100%);
+.auth-hero-banner {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem 2.5rem;
+    color: #ffffff;
+}
+
+.auth-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.88) 100%);
+    z-index: 1;
+}
+
+.auth-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.auth-glass-card {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    color: #ffffff;
+}
+
+.auth-form-side {
+    background: #ffffff;
+    padding: 3rem 2.75rem;
+}
+
+@media (max-width: 576px) {
+    .auth-form-side {
+        padding: 2rem 1.25rem;
+    }
 }
 
 .auth-icon-badge {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto;
+    width: 48px;
+    height: 48px;
     background: rgba(254, 66, 77, 0.1);
     color: #fe424d;
-    font-size: 1.85rem;
+    font-size: 1.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 0.75rem;
 }
 
-.auth-title {
-    color: #222222;
-    letter-spacing: -0.5px;
+.auth-input-group .input-group-text {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+    color: #64748b;
+    border-radius: 0.65rem 0 0 0.65rem;
+}
+
+.auth-input-group .form-control {
+    border-color: #e2e8f0;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    border-radius: 0 0.65rem 0.65rem 0;
+}
+
+.auth-input-group .form-control:focus {
+    border-color: #fe424d;
+    box-shadow: 0 0 0 0.25rem rgba(254, 66, 77, 0.15);
+}
+
+.auth-input-group .password-toggle-btn {
+    border-color: #e2e8f0;
+    background-color: #ffffff;
+    border-radius: 0 0.65rem 0.65rem 0;
+}
+
+.auth-quick-pill {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+}
+
+.auth-quick-pill:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    transform: translateY(-1px);
+}
+
+.social-auth-btn {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #1e293b;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.65rem 1rem;
+    border-radius: 0.65rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-auth-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    color: #0f172a;
+}
+
+.password-strength-bar {
+    height: 4px;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
 }
 
 .btn-airbnb-gradient {
@@ -794,11 +902,6 @@ body {
 
 .btn-airbnb-gradient:active {
     transform: translateY(0);
-}
-
-.demo-account-box {
-    background-color: #fafafa !important;
-    border: 1px dashed #d1d5db !important;
 }
 
 /* --- Google Maps & Show Page Styling --- */
