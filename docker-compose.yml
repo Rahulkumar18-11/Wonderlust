@@ -1,10 +1,13 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: wanderlust_app
     ports:
       - "8000:8000"
     environment:
+      - NODE_ENV=production
       - PORT=8000
       - ATLASDB_URL=mongodb://mongo:27017/wanderlust
       - SECRET=${SECRET:-z_2hb8CQoQvjWR6-1hETtEcz2Tw}
@@ -16,6 +19,8 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    networks:
+      - wanderlust_net
     restart: unless-stopped
 
   mongo:
@@ -30,8 +35,13 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - wanderlust_net
     restart: unless-stopped
+
+networks:
+  wanderlust_net:
+    driver: bridge
 
 volumes:
   mongo_data:
-
