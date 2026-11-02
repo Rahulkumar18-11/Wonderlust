@@ -185,7 +185,8 @@ module.exports.reserveListing = async(req, res) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
     let email = req.body?.email || req.query?.email || (req.user ? req.user.email : null) || "your registered email";
-    console.log(`📧 [EMAIL CONFIRMATION] Booking reservation details for listing '${listing ? listing.title : id}' sent to ${email}`);
-    req.flash("success", `Reservation confirmed! Confirmation details and itinerary have been sent to ${email}`);
+    let datesInfo = req.body?.checkin && req.body?.checkout ? ` for ${req.body.checkin} to ${req.body.checkout}` : "";
+    console.log(`📧 [EMAIL CONFIRMATION] Booking reservation details for listing '${listing ? listing.title : id}'${datesInfo} sent to ${email}`);
+    req.flash("success", `Reservation confirmed${datesInfo}! Itinerary and check-in instructions have been sent to ${email}`);
     res.redirect(`/listings/${id}`);
 };

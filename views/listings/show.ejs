@@ -13,16 +13,22 @@
                 <h2 class="listing-title fw-bold text-dark mb-1">
                     <%= listing.title %>
                 </h2>
-                <p class="text-muted small mb-0">
-                    <i class="fa-solid fa-star text-warning me-1"></i>4.9 &bull; 
-                    <u><i class="fa-solid fa-location-dot text-danger ms-1 me-1"></i><%= listing.location %>, <%= listing.country %></u>
+                <div class="d-flex flex-wrap align-items-center gap-2 text-muted small">
+                    <span><i class="fa-solid fa-star text-warning me-1"></i>4.9 &bull; <%= listing.reviews.length %> reviews</span>
+                    <span>&bull;</span>
+                    <span class="text-dark"><i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %></span>
                     <% if (listing.category) { %>
-                        &bull; <span class="badge bg-light text-dark border ms-1"><%= listing.category %></span>
+                        <span>&bull;</span>
+                        <span class="badge bg-light text-dark border px-2 py-1"><%= listing.category %></span>
                     <% } %>
-                </p>
+                    <!-- Distance Pill (Populated via JS) -->
+                    <span id="headerDistanceBadge" class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 d-none">
+                        <i class="fa-solid fa-location-arrow me-1"></i><span id="headerDistanceText"></span>
+                    </span>
+                </div>
             </div>
 
-            <!-- Main Listing Card -->
+            <!-- Main Image & Host Details -->
             <div class="card show-card listing-card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
                 <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="<%= listing.title %>" style="border-radius: 1.25rem; object-fit: cover; max-height: 480px; width: 100%;">
                 
@@ -30,9 +36,9 @@
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
                         <div>
                             <h5 class="fw-bold mb-0">
-                                Entire stay hosted by <%= listing.owner ? listing.owner.username : "WanderLust Host" %>
+                                Entire villa / stay hosted by <%= listing.owner ? listing.owner.username : "WanderLust Host" %>
                             </h5>
-                            <span class="text-muted small">Superhost &bull; Verified Property</span>
+                            <span class="text-muted small">Superhost &bull; 100% verified traveler ratings</span>
                         </div>
                         <div class="user-avatar-circle bg-danger text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-5" style="width: 48px; height: 48px;">
                             <%= listing.owner && listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : "H" %>
@@ -67,36 +73,86 @@
                 </div>
             </div>
 
-            <!-- Reservation & Email Submit Box -->
-            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #fbfcfe 100%); border: 1px solid #eef2f6 !important;">
-                <div class="row align-items-center">
-                    <div class="col-12 col-lg-6 mb-3 mb-lg-0">
-                        <h4 class="fw-bold mb-1">Reserve this Property</h4>
-                        <p class="text-muted small mb-2">Book your stay now and receive complete reservation details, check-in guide, and host contacts directly via email.</p>
-                        <div class="d-flex align-items-baseline gap-2">
-                            <span class="fs-4 fw-bold text-dark">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : 0 %></span>
-                            <span class="text-muted small">/ night + 18% GST</span>
+            <!-- Enhanced Airbnb-style Reservation Widget with Real-time Calculator & Email Submit -->
+            <div class="card border-0 shadow rounded-4 p-4 mb-4" id="reservationSection" style="background: linear-gradient(145deg, #ffffff 0%, #f9fbfd 100%); border: 1px solid #e2e8f0 !important;">
+                <div class="row g-4 align-items-start">
+                    <!-- Left: Pricing Breakdown Summary -->
+                    <div class="col-12 col-lg-5 border-end-lg pe-lg-4">
+                        <div class="d-flex align-items-baseline gap-2 mb-2">
+                            <span class="fs-3 fw-bold text-dark">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : 0 %></span>
+                            <span class="text-secondary small">/ night</span>
+                        </div>
+                        <p class="text-muted small mb-3">Select your travel dates and enter your email address to receive complete booking confirmation, tax invoice, and check-in guide.</p>
+                        
+                        <div class="p-3 bg-white rounded-3 border small">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">&#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") : 0 %> &times; <span id="stayNights">3 nights</span></span>
+                                <span class="fw-semibold" id="basePriceText">&#8377;<%= ((listing.price || 0) * 3).toLocaleString("en-IN") %></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Standard Cleaning fee</span>
+                                <span class="fw-semibold">&#8377;500</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">GST (18%)</span>
+                                <span class="fw-semibold" id="gstPriceText">&#8377;<%= Math.round(((listing.price || 0) * 3) * 0.18).toLocaleString("en-IN") %></span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="d-flex justify-content-between fs-6 fw-bold text-dark">
+                                <span>Total (incl. all taxes)</span>
+                                <span class="text-danger" id="totalPriceText">&#8377;<%= (((listing.price || 0) * 3) + Math.round(((listing.price || 0) * 3) * 0.18) + 500).toLocaleString("en-IN") %></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-6">
-                        <form action="/listings/<%= listing._id %>/reservelisting" method="POST" class="needs-validation" novalidate>
-                            <label for="reservationEmail" class="form-label small fw-semibold text-secondary">Submit Email for Booking Confirmation</label>
-                            <div class="input-group mb-2">
-                                <span class="input-group-text bg-white text-muted border-end-0">
-                                    <i class="fa-regular fa-envelope"></i>
-                                </span>
-                                <input type="email" class="form-control border-start-0 ps-1" name="email" id="reservationEmail" 
-                                    placeholder="Enter your email address" 
-                                    value="<%= currUser ? currUser.email : '' %>" 
-                                    required autocomplete="email">
-                                <button type="submit" class="btn btn-airbnb-gradient px-4 fw-semibold text-white">
-                                    <i class="fa-solid fa-calendar-check me-1"></i> Reserve
-                                </button>
-                                <div class="invalid-feedback">Please provide a valid email address for confirmation.</div>
+
+                    <!-- Right: Reservation Dates, Guests & Email Submit Form -->
+                    <div class="col-12 col-lg-7 ps-lg-3">
+                        <form action="/listings/<%= listing._id %>/reservelisting" method="POST" class="needs-validation" novalidate id="bookingForm">
+                            <h5 class="fw-bold mb-3"><i class="fa-solid fa-calendar-check text-danger me-2"></i>Book Your Stay</h5>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label for="checkinDate" class="form-label small fw-semibold text-secondary mb-1">Check-in</label>
+                                    <input type="date" class="form-control form-control-sm rounded-3" id="checkinDate" name="checkin" required>
+                                </div>
+                                <div class="col-6">
+                                    <label for="checkoutDate" class="form-label small fw-semibold text-secondary mb-1">Checkout</label>
+                                    <input type="date" class="form-control form-control-sm rounded-3" id="checkoutDate" name="checkout" required>
+                                </div>
                             </div>
-                            <span class="text-muted" style="font-size: 0.75rem;">
-                                <i class="fa-solid fa-shield-halved text-success me-1"></i> Instant confirmation sent to submitted email. Free cancellation up to 48 hours before check-in.
-                            </span>
+
+                            <div class="mb-3">
+                                <label for="guestsCount" class="form-label small fw-semibold text-secondary mb-1">Guests</label>
+                                <select class="form-select form-select-sm rounded-3" id="guestsCount" name="guests">
+                                    <option value="1">1 Guest</option>
+                                    <option value="2" selected>2 Guests</option>
+                                    <option value="3">3 Guests</option>
+                                    <option value="4">4 Guests</option>
+                                    <option value="5+">5+ Guests (Family)</option>
+                                </select>
+                            </div>
+
+                            <!-- Email Confirmation Input -->
+                            <div class="mb-3">
+                                <label for="reservationEmail" class="form-label small fw-semibold text-secondary mb-1">
+                                    Email Address for Confirmation <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted border-end-0">
+                                        <i class="fa-regular fa-envelope"></i>
+                                    </span>
+                                    <input type="email" class="form-control border-start-0 ps-1" name="email" id="reservationEmail" 
+                                        placeholder="name@example.com" 
+                                        value="<%= currUser ? currUser.email : '' %>" 
+                                        required autocomplete="email">
+                                    <div class="invalid-feedback">Please provide a valid email to receive your reservation.</div>
+                                </div>
+                                <span class="text-muted" style="font-size: 0.75rem;">Instant confirmation and digital lock codes will be dispatched to this email.</span>
+                            </div>
+
+                            <button type="submit" class="btn btn-airbnb-gradient w-100 py-2 fw-semibold text-white rounded-3 shadow-sm">
+                                <i class="fa-solid fa-lock me-1"></i> Confirm & Send Reservation to Email
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -155,8 +211,8 @@
 
             <hr class="my-4 text-muted opacity-25">
 
-            <!-- Google Map Section -->
-            <div class="mb-5">
+            <!-- Google Map with Distance From Your Location -->
+            <div class="mb-5" id="mapSection">
                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
                     <div>
                         <h4 class="fw-bold mb-1">Where you'll be</h4>
@@ -165,23 +221,50 @@
                             <strong><%= listing.location %>, <%= listing.country %></strong>
                         </p>
                     </div>
-                    <div class="d-flex gap-2 mt-2 mt-md-0">
-                        <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ', ' + listing.country) %>" 
+                    <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                        <a id="openGoogleMapsBtn" href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ', ' + listing.country) %>" 
                             target="_blank" rel="noopener noreferrer" 
                             class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm">
                             <i class="fa-solid fa-map-location-dot me-1"></i> Open in Google Maps
                         </a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(listing.location + ', ' + listing.country) %>" 
+                        <a id="getDirectionsBtn" href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(listing.location + ', ' + listing.country) %>" 
                             target="_blank" rel="noopener noreferrer" 
-                            class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm">
+                            class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm text-white">
                             <i class="fa-solid fa-diamond-turn-right me-1"></i> Get Directions
                         </a>
                     </div>
                 </div>
 
+                <!-- Live Distance from User's Location Banner -->
+                <div class="card border-0 shadow-sm rounded-4 p-3 mb-3 bg-light border">
+                    <div class="row align-items-center g-2">
+                        <div class="col-12 col-md-8">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-danger text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                    <i class="fa-solid fa-route"></i>
+                                </div>
+                                <div>
+                                    <span class="d-block small fw-bold text-dark" id="distanceStatusTitle">
+                                        Calculating distance from your current location...
+                                    </span>
+                                    <span class="text-secondary small" id="distanceStatusSubtitle">
+                                        Enable GPS location to see exact travel distance and route.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 text-md-end">
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3" id="detectLocationBtn">
+                                <i class="fa-solid fa-crosshairs me-1"></i> Detect My Location
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Google Maps Interactive Embed -->
-                <div class="google-map-wrapper rounded-4 overflow-hidden shadow-sm border position-relative" style="height: 420px; background-color: #e9ecef;">
+                <div class="google-map-wrapper rounded-4 overflow-hidden shadow-sm border position-relative" style="height: 440px; background-color: #e9ecef;">
                     <iframe 
+                        id="googleMapIframe"
                         width="100%" 
                         height="100%" 
                         frameborder="0" 
@@ -202,30 +285,33 @@
 
             <!-- Reviews Section -->
             <div class="mb-4">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <h4 class="fw-bold mb-0">Reviews</h4>
-                    <span class="badge bg-danger rounded-pill"><%= listing.reviews.length %></span>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <h4 class="fw-bold mb-0">Reviews</h4>
+                        <span class="badge bg-danger rounded-pill"><%= listing.reviews.length %></span>
+                    </div>
+                    <span class="text-muted small"><i class="fa-solid fa-award text-warning me-1"></i>Verified guest feedback</span>
                 </div>
 
                 <!-- Leave a Review Form (If User is logged in) -->
                 <% if (currUser) { %>
                     <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
-                        <h5 class="fw-bold mb-3">Leave a Review</h5>
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-pen-nib text-danger me-2"></i>Leave a Review</h5>
                         <form class="needs-validation" novalidate action="/listings/<%= listing._id %>/reviews" method="POST">
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary" for="rating">Rating</label>
+                                <label class="form-label small fw-semibold text-secondary" for="rating">Rating: <span id="ratingDescriptor" class="text-danger fw-bold">5 Stars - Amazing</span></label>
                                 <fieldset class="starability-slot">
                                     <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="5" checked aria-label="No rating." />
                                     <% for (let i = 1; i <= 5; i++) { %>
-                                        <input type="radio" id="rate<%= i %>" name="review[rating]" value="<%= i %>" />
+                                        <input type="radio" id="rate<%= i %>" name="review[rating]" value="<%= i %>" onchange="updateRatingDescriptor(<%= i %>)" />
                                         <label for="rate<%= i %>" title="<%= i %> stars"><%= i %> star</label>
                                     <% } %>
                                 </fieldset>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-semibold text-secondary" for="comment">Comments</label>
-                                <textarea class="form-control" name="review[comment]" id="comment" cols="30" rows="3" placeholder="Share your experience staying here..." required></textarea>
-                                <div class="invalid-feedback">Please add some comments for your review.</div>
+                                <label class="form-label small fw-semibold text-secondary" for="comment">Your Experience</label>
+                                <textarea class="form-control" name="review[comment]" id="comment" cols="30" rows="3" placeholder="Tell other travelers what you loved about this place..." required></textarea>
+                                <div class="invalid-feedback">Please write a comment for your review.</div>
                             </div>
                             <button class="btn btn-dark px-4 rounded-3 fw-semibold">
                                 <i class="fa-solid fa-paper-plane me-1"></i> Submit Review
@@ -233,9 +319,9 @@
                         </form>
                     </div>
                 <% } else { %>
-                    <div class="alert alert-light border rounded-3 p-3 mb-4">
-                        <i class="fa-solid fa-lock text-muted me-2"></i>
-                        Please <a href="/login" class="text-danger fw-bold text-decoration-none">log in</a> to write a review.
+                    <div class="alert alert-light border rounded-3 p-3 mb-4 d-flex align-items-center justify-content-between">
+                        <span><i class="fa-solid fa-lock text-muted me-2"></i>Log in to share your review and experience with other travelers.</span>
+                        <a href="/login" class="btn btn-sm btn-danger rounded-pill px-3 fw-semibold">Log in</a>
                     </div>
                 <% } %>
 
@@ -266,12 +352,12 @@
                                             </p>
                                         </div>
 
-                                        <!-- Edit and Delete Review Buttons for Author -->
+                                        <!-- Edit and Delete Review Buttons for Review Author -->
                                         <% if (currUser && review.author && currUser._id.toString() === review.author._id.toString()) { %>
                                             <div class="d-flex align-items-center gap-2 pt-2 border-top">
                                                 <!-- Edit Review Trigger Button -->
                                                 <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" data-bs-toggle="modal" data-bs-target="#editReviewModal-<%= review._id %>">
-                                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit Review
                                                 </button>
 
                                                 <!-- Delete Review Form -->
@@ -288,7 +374,7 @@
                                                     <div class="modal-content rounded-4 border-0 shadow">
                                                         <div class="modal-header border-bottom pb-3">
                                                             <h5 class="modal-title fw-bold" id="editReviewModalLabel-<%= review._id %>">
-                                                                <i class="fa-solid fa-pen-to-square text-danger me-2"></i>Edit Review
+                                                                <i class="fa-solid fa-pen-to-square text-danger me-2"></i>Edit Your Review
                                                             </h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
@@ -296,10 +382,10 @@
                                                             <div class="modal-body p-4">
                                                                 <!-- Rating Select -->
                                                                 <div class="mb-3">
-                                                                    <label for="editRating-<%= review._id %>" class="form-label small fw-semibold text-secondary">Rating (1 to 5 Stars)</label>
-                                                                    <select class="form-select" id="editRating-<%= review._id %>" name="review[rating]" required>
+                                                                    <label for="editRating-<%= review._id %>" class="form-label small fw-semibold text-secondary">Rating</label>
+                                                                    <select class="form-select rounded-3" id="editRating-<%= review._id %>" name="review[rating]" required>
                                                                         <option value="5" <%= review.rating === 5 ? 'selected' : '' %>>⭐⭐⭐⭐⭐ (5 Stars - Exceptional)</option>
-                                                                        <option value="4" <%= review.rating === 4 ? 'selected' : '' %>>⭐⭐⭐⭐ (4 Stars - Good)</option>
+                                                                        <option value="4" <%= review.rating === 4 ? 'selected' : '' %>>⭐⭐⭐⭐ (4 Stars - Very Good)</option>
                                                                         <option value="3" <%= review.rating === 3 ? 'selected' : '' %>>⭐⭐⭐ (3 Stars - Average)</option>
                                                                         <option value="2" <%= review.rating === 2 ? 'selected' : '' %>>⭐⭐ (2 Stars - Below Average)</option>
                                                                         <option value="1" <%= review.rating === 1 ? 'selected' : '' %>>⭐ (1 Star - Poor)</option>
@@ -309,7 +395,7 @@
                                                                 <!-- Comment Textarea -->
                                                                 <div class="mb-3">
                                                                     <label for="editComment-<%= review._id %>" class="form-label small fw-semibold text-secondary">Comments</label>
-                                                                    <textarea class="form-control" name="review[comment]" id="editComment-<%= review._id %>" rows="4" required><%= review.comment %></textarea>
+                                                                    <textarea class="form-control rounded-3" name="review[comment]" id="editComment-<%= review._id %>" rows="4" required><%= review.comment %></textarea>
                                                                     <div class="invalid-feedback">Please enter your updated comment.</div>
                                                                 </div>
                                                             </div>
@@ -328,9 +414,166 @@
                         <% } %>
                     </div>
                 <% } else { %>
-                    <p class="text-muted small">No reviews yet. Be the first to review this place!</p>
+                    <p class="text-muted small">No reviews yet. Be the first traveler to review this place!</p>
                 <% } %>
             </div>
         </div>
     </div>
+
+    <!-- Client-side Scripts for Real-time Reservation Calculation & Google Maps Distance -->
+    <script>
+        // 1. DYNAMIC RESERVATION PRICING CALCULATION
+        const pricePerNight = <%= listing.price || 0 %>;
+        const checkinInput = document.getElementById('checkinDate');
+        const checkoutInput = document.getElementById('checkoutDate');
+
+        // Set default dates: checkin = tomorrow, checkout = checkin + 3 days
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const threeDaysLater = new Date(tomorrow);
+        threeDaysLater.setDate(threeDaysLater.getDate() + 3);
+
+        const formatDate = (date) => date.toISOString().split('T')[0];
+        if (checkinInput && checkoutInput) {
+            checkinInput.min = formatDate(today);
+            checkinInput.value = formatDate(tomorrow);
+            checkoutInput.min = formatDate(tomorrow);
+            checkoutInput.value = formatDate(threeDaysLater);
+
+            function updatePricing() {
+                const checkin = new Date(checkinInput.value);
+                const checkout = new Date(checkoutInput.value);
+                const diffTime = Math.round((checkout - checkin) / (1000 * 60 * 60 * 24));
+                const nights = isNaN(diffTime) || diffTime <= 0 ? 1 : diffTime;
+                
+                const base = pricePerNight * nights;
+                const gst = Math.round(base * 0.18);
+                const cleaning = 500;
+                const total = base + gst + cleaning;
+
+                const nightsEl = document.getElementById('stayNights');
+                const baseEl = document.getElementById('basePriceText');
+                const gstEl = document.getElementById('gstPriceText');
+                const totalEl = document.getElementById('totalPriceText');
+
+                if (nightsEl) nightsEl.innerText = nights + (nights === 1 ? ' night' : ' nights');
+                if (baseEl) baseEl.innerText = '₹' + base.toLocaleString('en-IN');
+                if (gstEl) gstEl.innerText = '₹' + gst.toLocaleString('en-IN');
+                if (totalEl) totalEl.innerText = '₹' + total.toLocaleString('en-IN');
+            }
+
+            checkinInput.addEventListener('change', () => {
+                if (new Date(checkoutInput.value) <= new Date(checkinInput.value)) {
+                    const nextDay = new Date(checkinInput.value);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    checkoutInput.value = formatDate(nextDay);
+                }
+                checkoutInput.min = checkinInput.value;
+                updatePricing();
+            });
+
+            checkoutInput.addEventListener('change', updatePricing);
+            updatePricing();
+        }
+
+        // 2. RATING DESCRIPTOR
+        function updateRatingDescriptor(val) {
+            const descEl = document.getElementById('ratingDescriptor');
+            if (!descEl) return;
+            const map = {
+                1: '1 Star - Poor',
+                2: '2 Stars - Below Average',
+                3: '3 Stars - Average',
+                4: '4 Stars - Very Good',
+                5: '5 Stars - Amazing'
+            };
+            descEl.innerText = map[val] || (val + ' Stars');
+        }
+
+        // 3. GOOGLE MAPS DISTANCE CALCULATION (HAVERSINE FORMULA)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return Math.round(R * c);
+        }
+
+        // Listing Coordinates
+        const destCoords = listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2
+            ? { lng: listing.geometry.coordinates[0], lat: listing.geometry.coordinates[1] }
+            : null;
+
+        const destQuery = encodeURIComponent("<%= listing.location %>, <%= listing.country %>");
+
+        function handleUserLocation(lat, lng) {
+            const directionsBtn = document.getElementById('getDirectionsBtn');
+            const statusTitle = document.getElementById('distanceStatusTitle');
+            const statusSub = document.getElementById('distanceStatusSubtitle');
+            const headerBadge = document.getElementById('headerDistanceBadge');
+            const headerText = document.getElementById('headerDistanceText');
+
+            // Update Directions link with user's exact coordinates
+            if (directionsBtn) {
+                directionsBtn.href = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${destQuery}`;
+            }
+
+            if (destCoords) {
+                const km = calculateDistance(lat, lng, destCoords.lat, destCoords.lng);
+                const miles = Math.round(km * 0.621371);
+                const kmFormatted = km.toLocaleString('en-IN');
+                const milesFormatted = miles.toLocaleString('en-IN');
+
+                if (statusTitle) {
+                    statusTitle.innerHTML = `<span class="text-danger fw-bold">~${kmFormatted} km (${milesFormatted} miles)</span> away from your location`;
+                }
+                if (statusSub) {
+                    statusSub.innerHTML = `Direct distance to <strong>${listing.location}, ${listing.country}</strong>. Click 'Get Directions' to view the turn-by-turn route.`;
+                }
+                if (headerBadge && headerText) {
+                    headerText.innerText = `~${kmFormatted} km from you`;
+                    headerBadge.classList.remove('d-none');
+                }
+            } else {
+                if (statusTitle) statusTitle.innerText = "Location detected!";
+                if (statusSub) statusSub.innerText = "Click 'Get Directions' to compute the driving or flight route.";
+            }
+        }
+
+        function triggerGeolocation() {
+            const statusTitle = document.getElementById('distanceStatusTitle');
+            const statusSub = document.getElementById('distanceStatusSubtitle');
+            
+            if ("geolocation" in navigator) {
+                if (statusTitle) statusTitle.innerText = "Accessing your GPS location...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        handleUserLocation(position.coords.latitude, position.coords.longitude);
+                    },
+                    (error) => {
+                        console.warn("Geolocation prompt was dismissed or denied:", error.message);
+                        if (statusTitle) statusTitle.innerText = "Location access not granted";
+                        if (statusSub) statusSub.innerText = "Click 'Get Directions' to open Google Maps with your current city.";
+                    },
+                    { timeout: 10000, enableHighAccuracy: true }
+                );
+            } else {
+                if (statusTitle) statusTitle.innerText = "Geolocation not supported by browser";
+            }
+        }
+
+        // Auto trigger detection on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            triggerGeolocation();
+            const detectBtn = document.getElementById('detectLocationBtn');
+            if (detectBtn) {
+                detectBtn.addEventListener('click', triggerGeolocation);
+            }
+        });
+    </script>
 </body>
