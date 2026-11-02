@@ -18,19 +18,6 @@
                             <p class="text-muted small">Log in to explore extraordinary stays and experiences</p>
                         </div>
 
-                        <!-- One-Click Quick Fill Demo Account -->
-                        <div class="demo-account-box mb-4 p-3 rounded-3 bg-light border text-center">
-                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                <span class="small fw-semibold text-secondary"><i class="fa-solid fa-bolt text-warning me-1"></i> Quick Demo Account</span>
-                                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2 rounded-pill" id="fillDemoBtn" style="font-size: 0.75rem;">
-                                    Auto-fill
-                                </button>
-                            </div>
-                            <p class="mb-0 text-muted" style="font-size: 0.8rem;">
-                                Username: <code class="text-dark">admin</code> &bull; Password: <code class="text-dark">admin123</code>
-                            </p>
-                        </div>
-
                         <!-- Login Form -->
                         <form action="/login" method="post" novalidate class="needs-validation" id="loginForm">
                             <!-- Username Field -->
@@ -123,19 +110,6 @@
             const isPassword = passwordInput.getAttribute('type') === 'password';
             passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
             togglePasswordIcon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
-        });
-    }
-
-    // Quick Fill Demo Account
-    const fillDemoBtn = document.getElementById('fillDemoBtn');
-    if (fillDemoBtn) {
-        fillDemoBtn.addEventListener('click', () => {
-            document.getElementById('username').value = 'admin';
-            document.getElementById('password').value = 'admin123';
-            fillDemoBtn.innerHTML = '<i class="fa-solid fa-check"></i> Filled!';
-            setTimeout(() => {
-                fillDemoBtn.innerText = 'Auto-fill';
-            }, 1800);
         });
     }
 </script>
