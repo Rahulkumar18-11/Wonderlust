@@ -41,4 +41,17 @@ router
 
 router.get("/logout", userController.logout);
 
+// Newsletter / Contact Email Submission
+router.post("/subscribe", (req, res) => {
+  const { email } = req.body;
+  if (!email || !email.includes("@")) {
+    req.flash("error", "Please provide a valid email address!");
+  } else {
+    console.log(`📧 [NEWSLETTER SUBSCRIBED] Email: ${email}`);
+    req.flash("success", `Thank you! Travel inspirations and deals will be sent to ${email}`);
+  }
+  const redirectUrl = req.get("Referrer") || "/listings";
+  res.redirect(redirectUrl);
+});
+
 module.exports = router;

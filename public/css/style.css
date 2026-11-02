@@ -800,3 +800,17 @@ body {
     background-color: #fafafa !important;
     border: 1px dashed #d1d5db !important;
 }
+
+/* --- Google Maps & Show Page Styling --- */
+.google-map-wrapper {
+    position: relative;
+    border-radius: 1.25rem !important;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.google-map-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}

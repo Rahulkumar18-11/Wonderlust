@@ -15,6 +15,14 @@ router.post(
   wrapAsync(reviewController.createReview)
 );
 
+router.put(
+  "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
+  validateReview,
+  wrapAsync(reviewController.updateReview)
+);
+
 router.delete(
   "/:reviewId",
   isLoggedIn,

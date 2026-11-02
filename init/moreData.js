@@ -257,3 +257,4 @@ const moreListings = [
 ];
 
 module.exports = moreListings;
+

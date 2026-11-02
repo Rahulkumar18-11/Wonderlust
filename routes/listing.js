@@ -16,38 +16,8 @@ router
         validateListing,
         wrapAsync(listingController.createListing)
     );
-//
-// routes/listings.js 
-
-const Listing = require("../models/listing"); // make sure the model is imported
-
-// Show route
-router.get("/listings/:id", async(req, res) => {
-    const { id } = req.params;
-
-    try {
-        const listing = await Listing.findById(id)
-            .populate("owner")
-            .populate({
-                path: "reviews",
-                populate: { path: "author" },
-            });
-
-        if (!listing) {
-            return res.status(404).send("Listing not found");
-        }
-
-        res.render("listings/show", { listing, currUser: req.user });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Something went wrong");
-    }
-});
-
-
 
 router.get("/new", isLoggedIn, listingController.renderNewForm);
-
 router.get("/filter/:id", wrapAsync(listingController.filter));
 router.get("/search", listingController.search);
 
@@ -70,10 +40,9 @@ router.get(
     wrapAsync(listingController.renderEditForm)
 );
 
-router.get(
-    "/:id/reservelisting",
-    isLoggedIn,
-    wrapAsync(listingController.reserveListing)
-);
+router
+    .route("/:id/reservelisting")
+    .get(isLoggedIn, wrapAsync(listingController.reserveListing))
+    .post(isLoggedIn, wrapAsync(listingController.reserveListing));
 
 module.exports = router;
