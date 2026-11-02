@@ -1,6 +1,4 @@
-# WANDERLUST-TRAVEL-
-
-# WanderLust (Tour and Travels Project)
+# Wonderlust
 
 The Wanderlust Project is a full-stack travel listing web application designed to help users explore, view, and manage vacation accommodations, cabins, beach houses, and villas. It allows travelers to browse destinations, explore locations on Google Maps, calculate travel distance from user location, book stays with real-time price calculators and email confirmation, checkout through multiple payment gateways, and manage verified reviews.
 
