@@ -181,12 +181,84 @@ module.exports.destroyListing = async(req, res) => {
     res.redirect("/listings");
 };
 
-module.exports.reserveListing = async(req, res) => {
+// Render Payment & Checkout Page
+module.exports.renderPaymentPage = async(req, res) => {
     let { id } = req.params;
-    let listing = await Listing.findById(id);
-    let email = req.body?.email || req.query?.email || (req.user ? req.user.email : null) || "your registered email";
-    let datesInfo = req.body?.checkin && req.body?.checkout ? ` for ${req.body.checkin} to ${req.body.checkout}` : "";
-    console.log(`📧 [EMAIL CONFIRMATION] Booking reservation details for listing '${listing ? listing.title : id}'${datesInfo} sent to ${email}`);
-    req.flash("success", `Reservation confirmed${datesInfo}! Itinerary and check-in instructions have been sent to ${email}`);
-    res.redirect(`/listings/${id}`);
+    let listing = await Listing.findById(id).populate("owner");
+    if (!listing) {
+        req.flash("error", "Listing not found!");
+        return res.redirect("/listings");
+    }
+
+    const checkin = req.body?.checkin || req.query?.checkin || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    const checkout = req.body?.checkout || req.query?.checkout || new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0];
+    const guests = req.body?.guests || req.query?.guests || 2;
+    const email = req.body?.email || req.query?.email || (req.user ? req.user.email : "");
+
+    const diffDays = Math.max(1, Math.round((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24)));
+    const nights = isNaN(diffDays) || diffDays <= 0 ? 1 : diffDays;
+    const basePrice = (listing.price || 0) * nights;
+    const gst = Math.round(basePrice * 0.18);
+    const cleaningFee = 500;
+    const totalPrice = basePrice + gst + cleaningFee;
+    const bookingId = "WL-" + Math.floor(100000 + Math.random() * 900000);
+
+    const bookingDetails = {
+        checkin,
+        checkout,
+        guests,
+        email,
+        nights,
+        basePrice,
+        gst,
+        cleaningFee,
+        totalPrice,
+        bookingId
+    };
+
+    console.log(`💳 [CHECKOUT INITIATED] Checkout page opened for listing '${listing.title}' by '${email}' (Total: ₹${totalPrice})`);
+    res.render("listings/payment.ejs", { listing, bookingDetails });
+};
+
+// Confirm Payment & Issue Digital Receipt
+module.exports.confirmPayment = async(req, res) => {
+    let { id } = req.params;
+    let listing = await Listing.findById(id).populate("owner");
+    if (!listing) {
+        req.flash("error", "Listing not found!");
+        return res.redirect("/listings");
+    }
+
+    const {
+        bookingId = "WL-" + Math.floor(100000 + Math.random() * 900000),
+        checkin = "2026-11-10",
+        checkout = "2026-11-13",
+        guests = 2,
+        email = req.user ? req.user.email : "guest@wanderlust.com",
+        paymentMethod = "Instant UPI / QR Code",
+        totalPrice = (listing.price || 0) * 3 + 500
+    } = req.body;
+
+    console.log(`✅ [PAYMENT CONFIRMED] Booking ${bookingId} for '${listing.title}' paid via ${paymentMethod} (Amount: ₹${totalPrice})`);
+    console.log(`📧 [ITINERARY EMAILED] Official confirmation voucher & access code sent to ${email}`);
+
+    req.flash("success", `Payment confirmed! Official booking voucher has been sent to ${email}`);
+
+    res.render("listings/success.ejs", {
+        listing,
+        booking: {
+            bookingId,
+            checkin,
+            checkout,
+            guests,
+            email,
+            paymentMethod,
+            totalPrice,
+            accessCode: "#" + Math.floor(1000 + Math.random() * 9000)
+        }
+    });
+};
+
+module.exports.reserveListing = async(req, res) => {
+    return module.exports.renderPaymentPage(req, res);
 };

@@ -40,9 +40,19 @@ router.get(
     wrapAsync(listingController.renderEditForm)
 );
 
+// Reservation & Payment Checkout Routes
 router
     .route("/:id/reservelisting")
     .get(isLoggedIn, wrapAsync(listingController.reserveListing))
     .post(isLoggedIn, wrapAsync(listingController.reserveListing));
+
+router
+    .route("/:id/payment")
+    .get(isLoggedIn, wrapAsync(listingController.renderPaymentPage))
+    .post(isLoggedIn, wrapAsync(listingController.renderPaymentPage));
+
+router
+    .route("/:id/payment/confirm")
+    .post(isLoggedIn, wrapAsync(listingController.confirmPayment));
 
 module.exports = router;

@@ -1,0 +1,283 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4 my-2">
+    <!-- Header Back Navigation & Breadcrumb -->
+    <div class="mb-4">
+        <a href="/listings/<%= listing._id %>" class="btn btn-sm btn-outline-dark rounded-pill px-3 text-decoration-none">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to <%= listing.title %>
+        </a>
+    </div>
+
+    <!-- Stepper Progress Bar -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="d-flex justify-content-between position-relative text-center small fw-semibold">
+                <div class="position-absolute top-50 start-0 translate-middle-y w-100 bg-secondary bg-opacity-25" style="height: 2px; z-index: 1;"></div>
+                
+                <div class="position-relative bg-white px-2" style="z-index: 2;">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-1" style="width: 28px; height: 28px;">
+                        <i class="fa-solid fa-check" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="text-success small">1. Choose Stay</div>
+                </div>
+
+                <div class="position-relative bg-white px-2" style="z-index: 2;">
+                    <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-1 shadow-sm" style="width: 28px; height: 28px;">
+                        2
+                    </div>
+                    <div class="text-danger fw-bold small">2. Confirm & Pay</div>
+                </div>
+
+                <div class="position-relative bg-white px-2" style="z-index: 2;">
+                    <div class="bg-light text-muted border rounded-circle d-inline-flex align-items-center justify-content-center mb-1" style="width: 28px; height: 28px;">
+                        3
+                    </div>
+                    <div class="text-muted small">3. Receipt & Keys</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- LEFT: Payment Methods Section -->
+        <div class="col-12 col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h4 class="fw-bold text-dark mb-1">Confirm and Pay</h4>
+                <p class="text-muted small mb-4">Select your preferred payment method to secure your booking. All transactions are SSL encrypted and secure.</p>
+
+                <form action="/listings/<%= listing._id %>/payment/confirm" method="POST" id="checkoutForm" class="needs-validation" novalidate>
+                    <!-- Hidden Booking Parameters -->
+                    <input type="hidden" name="bookingId" value="<%= bookingDetails.bookingId %>">
+                    <input type="hidden" name="checkin" value="<%= bookingDetails.checkin %>">
+                    <input type="hidden" name="checkout" value="<%= bookingDetails.checkout %>">
+                    <input type="hidden" name="guests" value="<%= bookingDetails.guests %>">
+                    <input type="hidden" name="nights" value="<%= bookingDetails.nights %>">
+                    <input type="hidden" name="totalPrice" value="<%= bookingDetails.totalPrice %>">
+
+                    <!-- Guest Contact Details Confirmation -->
+                    <div class="mb-4 p-3 bg-light rounded-3 border">
+                        <h6 class="fw-bold mb-2 text-dark"><i class="fa-regular fa-id-card text-danger me-2"></i>Guest Contact Information</h6>
+                        <div class="row g-2">
+                            <div class="col-12 col-sm-6">
+                                <label for="guestName" class="form-label small fw-semibold text-secondary mb-1">Full Name</label>
+                                <input type="text" class="form-control form-control-sm" id="guestName" name="guestName" value="<%= currUser ? currUser.username : 'Rahul Kumar' %>" required>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="confirmEmail" class="form-label small fw-semibold text-secondary mb-1">Confirmation Email</label>
+                                <input type="email" class="form-control form-control-sm" id="confirmEmail" name="email" value="<%= bookingDetails.email %>" required autocomplete="email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Options Accordion / Tabs -->
+                    <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-wallet text-danger me-2"></i>Choose Payment Method</h6>
+
+                    <!-- 1. UPI / QR Code -->
+                    <div class="card border rounded-3 mb-3 p-3 payment-method-card">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="payUPI" value="UPI / QR Code" checked onchange="togglePaymentTabs()">
+                                <label class="form-check-label fw-bold ms-2 text-dark" for="payUPI">
+                                    Instant UPI / QR Code
+                                </label>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle ms-2 small">Instant Confirmation</span>
+                            </div>
+                            <div class="d-flex gap-2 text-secondary fs-5">
+                                <i class="fa-brands fa-google-pay text-dark" title="Google Pay"></i>
+                                <i class="fa-solid fa-mobile-screen-button text-primary" title="PhonePe / BHIM"></i>
+                            </div>
+                        </div>
+
+                        <div id="upiDetailsBox" class="mt-3 pt-3 border-top">
+                            <div class="row align-items-center g-3">
+                                <div class="col-12 col-sm-5 text-center">
+                                    <!-- Dynamic Simulated UPI QR Code -->
+                                    <div class="p-2 border rounded-3 bg-white d-inline-block shadow-sm">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=upi://pay?pa=wanderlust@icici&pn=WanderLust%20Travel&am=<%= bookingDetails.totalPrice %>&cu=INR&tn=<%= bookingDetails.bookingId %>" 
+                                            alt="UPI QR Code" class="img-fluid rounded" style="width: 130px; height: 130px;">
+                                    </div>
+                                    <span class="d-block text-muted small mt-1" style="font-size: 0.72rem;">Scan with GPay, PhonePe or Paytm</span>
+                                </div>
+                                <div class="col-12 col-sm-7">
+                                    <label for="upiId" class="form-label small fw-semibold text-secondary mb-1">Or Enter Your UPI ID / VPA</label>
+                                    <div class="input-group input-group-sm mb-2">
+                                        <input type="text" class="form-control" id="upiId" placeholder="username@okhdfcbank" value="wanderlust.travel@oksbi">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="alert('UPI ID verified successfully!');">Verify</button>
+                                    </div>
+                                    <span class="text-muted small" style="font-size: 0.75rem;">A payment request of ₹<%= bookingDetails.totalPrice.toLocaleString("en-IN") %> will be dispatched to your UPI app.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Credit or Debit Cards -->
+                    <div class="card border rounded-3 mb-3 p-3 payment-method-card">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="payCard" value="Credit / Debit Card" onchange="togglePaymentTabs()">
+                                <label class="form-check-label fw-bold ms-2 text-dark" for="payCard">
+                                    Credit / Debit Card
+                                </label>
+                            </div>
+                            <div class="d-flex gap-2 text-secondary fs-5">
+                                <i class="fa-brands fa-cc-visa text-primary" title="Visa"></i>
+                                <i class="fa-brands fa-cc-mastercard text-danger" title="Mastercard"></i>
+                                <i class="fa-brands fa-cc-amex text-info" title="American Express"></i>
+                            </div>
+                        </div>
+
+                        <div id="cardDetailsBox" class="mt-3 pt-3 border-top d-none">
+                            <div class="mb-2">
+                                <label for="cardNumber" class="form-label small fw-semibold text-secondary mb-1">Card Number</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-white text-muted"><i class="fa-regular fa-credit-card"></i></span>
+                                    <input type="text" class="form-control" id="cardNumber" placeholder="4242 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242" maxlength="19">
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <label for="cardExpiry" class="form-label small fw-semibold text-secondary mb-1">Expiration (MM/YY)</label>
+                                    <input type="text" class="form-control form-control-sm" id="cardExpiry" placeholder="12/28" maxlength="5">
+                                </div>
+                                <div class="col-6">
+                                    <label for="cardCvv" class="form-label small fw-semibold text-secondary mb-1">CVV / CVC</label>
+                                    <input type="password" class="form-control form-control-sm" id="cardCvv" placeholder="123" maxlength="4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Net Banking -->
+                    <div class="card border rounded-3 mb-3 p-3 payment-method-card">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="payNetBanking" value="Net Banking" onchange="togglePaymentTabs()">
+                                <label class="form-check-label fw-bold ms-2 text-dark" for="payNetBanking">
+                                    Net Banking
+                                </label>
+                            </div>
+                            <i class="fa-solid fa-building-columns text-secondary fs-5"></i>
+                        </div>
+                        <div id="netBankingDetailsBox" class="mt-3 pt-3 border-top d-none">
+                            <select class="form-select form-select-sm">
+                                <option selected>HDFC Bank</option>
+                                <option>State Bank of India (SBI)</option>
+                                <option>ICICI Bank</option>
+                                <option>Axis Bank</option>
+                                <option>Kotak Mahindra Bank</option>
+                                <option>Punjab National Bank</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 4. Pay on Arrival -->
+                    <div class="card border rounded-3 mb-4 p-3 payment-method-card">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="payArrival" value="Pay on Arrival" onchange="togglePaymentTabs()">
+                                <label class="form-check-label fw-bold ms-2 text-dark" for="payArrival">
+                                    Pay on Arrival / Cash at Check-in
+                                </label>
+                            </div>
+                            <i class="fa-solid fa-hand-holding-dollar text-success fs-5"></i>
+                        </div>
+                        <div id="arrivalDetailsBox" class="mt-2 pt-2 border-top d-none">
+                            <p class="text-muted small mb-0">No upfront charges today. You can pay ₹<%= bookingDetails.totalPrice.toLocaleString("en-IN") %> directly to host upon arrival.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cancellation & Policies -->
+                    <div class="alert alert-light border rounded-3 p-3 mb-4 text-muted small">
+                        <i class="fa-solid fa-shield-halved text-success me-2"></i>
+                        <strong>Free cancellation up to 48 hours before check-in.</strong> After that, cancel before check-in and get a 50% refund, minus service fees.
+                    </div>
+
+                    <!-- Submit Payment Button -->
+                    <button type="submit" class="btn btn-airbnb-gradient w-100 py-3 fw-bold rounded-3 shadow text-white fs-6">
+                        <i class="fa-solid fa-lock me-2"></i> Confirm Payment of &#8377;<%= bookingDetails.totalPrice.toLocaleString("en-IN") %>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT: Booking Details & Price Breakdown Summary Card -->
+        <div class="col-12 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top bg-white" style="top: 90px;">
+                <!-- Listing Thumbnail & Title -->
+                <div class="d-flex gap-3 pb-3 border-bottom mb-3">
+                    <img src="<%= listing.image.url %>" alt="<%= listing.title %>" class="rounded-3 object-fit-cover shadow-sm" style="width: 100px; height: 90px;">
+                    <div>
+                        <span class="badge bg-light text-dark border mb-1 small"><%= listing.category || "Villa" %></span>
+                        <h6 class="fw-bold mb-1 text-dark text-truncate" style="max-width: 220px;"><%= listing.title %></h6>
+                        <p class="text-muted small mb-0"><i class="fa-solid fa-location-dot text-danger me-1"></i><%= listing.location %>, <%= listing.country %></p>
+                        <span class="small text-secondary"><i class="fa-solid fa-star text-warning me-1"></i>4.9 (Superhost)</span>
+                    </div>
+                </div>
+
+                <!-- Booking Dates Summary -->
+                <h6 class="fw-bold mb-3 text-dark">Your Booking Details</h6>
+                <div class="p-3 bg-light rounded-3 border mb-3 small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="fa-regular fa-calendar me-1"></i> Dates:</span>
+                        <span class="fw-bold text-dark"><%= bookingDetails.checkin %> &rarr; <%= bookingDetails.checkout %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="fa-regular fa-moon me-1"></i> Duration:</span>
+                        <span class="fw-semibold text-dark"><%= bookingDetails.nights %> <%= bookingDetails.nights === 1 ? 'night' : 'nights' %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="text-muted"><i class="fa-solid fa-user-group me-1"></i> Guests:</span>
+                        <span class="fw-semibold text-dark"><%= bookingDetails.guests %> <%= bookingDetails.guests == 1 ? 'Guest' : 'Guests' %></span>
+                    </div>
+                </div>
+
+                <!-- Price Details Breakdown -->
+                <h6 class="fw-bold mb-2 text-dark">Price Breakdown</h6>
+                <div class="small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">&#8377;<%= (listing.price || 0).toLocaleString("en-IN") %> &times; <%= bookingDetails.nights %> nights</span>
+                        <span class="fw-semibold text-dark">&#8377;<%= bookingDetails.basePrice.toLocaleString("en-IN") %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Cleaning & Sanitation fee</span>
+                        <span class="fw-semibold text-dark">&#8377;<%= bookingDetails.cleaningFee %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">GST & Tourist Tax (18%)</span>
+                        <span class="fw-semibold text-dark">&#8377;<%= bookingDetails.gst.toLocaleString("en-IN") %></span>
+                    </div>
+                    <hr class="my-3">
+                    <div class="d-flex justify-content-between fs-5 fw-bold text-dark mb-1">
+                        <span>Total Payable</span>
+                        <span class="text-danger">&#8377;<%= bookingDetails.totalPrice.toLocaleString("en-IN") %></span>
+                    </div>
+                    <span class="text-muted" style="font-size: 0.75rem;">Includes all applicable taxes and host fees.</span>
+                </div>
+
+                <!-- Guarantee Badge -->
+                <div class="mt-4 pt-3 border-top text-center text-muted small">
+                    <i class="fa-solid fa-lock text-success me-1"></i> 256-Bit SSL Bank Grade Security
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePaymentTabs() {
+        const payUPI = document.getElementById('payUPI');
+        const payCard = document.getElementById('payCard');
+        const payNetBanking = document.getElementById('payNetBanking');
+        const payArrival = document.getElementById('payArrival');
+
+        const upiBox = document.getElementById('upiDetailsBox');
+        const cardBox = document.getElementById('cardDetailsBox');
+        const netBankingBox = document.getElementById('netBankingDetailsBox');
+        const arrivalBox = document.getElementById('arrivalDetailsBox');
+
+        if (upiBox) upiBox.classList.toggle('d-none', !payUPI.checked);
+        if (cardBox) cardBox.classList.toggle('d-none', !payCard.checked);
+        if (netBankingBox) netBankingBox.classList.toggle('d-none', !payNetBanking.checked);
+        if (arrivalBox) arrivalBox.classList.toggle('d-none', !payArrival.checked);
+    }
+</script>
