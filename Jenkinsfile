@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    triggers {
+        // Automatically checks GitHub for new commits every 2 minutes
+        pollSCM('H/2 * * * *')
+        // Automatically triggers on GitHub Webhook push
+        githubPush()
+    }
+
     environment {
         APP_NAME = "wanderlust"
         PORT = "8000"
@@ -8,10 +15,10 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Source Code') {
             steps {
                 echo '====================================='
-                echo ' Stage 1: Checkout Source Code'
+                echo ' Stage 1: Checkout Source Code from GitHub'
                 echo '====================================='
                 checkout scm
             }
@@ -24,11 +31,10 @@ pipeline {
                 echo '====================================='
                 bat 'node -v'
                 bat 'npm -v'
-                bat 'docker -v'
             }
         }
 
-        stage('Install Dependencies & Lint') {
+        stage('Install Dependencies') {
             steps {
                 echo '====================================='
                 echo ' Stage 3: Installing Node.js Dependencies'
@@ -37,29 +43,19 @@ pipeline {
             }
         }
 
-        stage('Docker Deployment') {
+        stage('Database & Sanity Check') {
             steps {
                 echo '====================================='
-                echo ' Stage 4: Docker Container Deployment'
+                echo ' Stage 4: Database Connection Sanity Check'
                 echo '====================================='
-                script {
-                    def dockerStatus = bat(script: 'docker.exe info >nul 2>&1', returnStatus: true)
-                    if (dockerStatus == 0) {
-                        echo '[INFO] Docker daemon active. Building and launching Wanderlust stack...'
-                        bat 'docker compose up --build -d'
-                        echo 'Waiting for web and mongo containers to stabilize...'
-                        bat 'timeout /t 10 /nobreak'
-                    } else {
-                        echo '[WARN] Docker daemon is not accessible. Running standalone node verification.'
-                    }
-                }
+                bat 'node -e "const m = require(\'mongoose\'); m.connect(\'mongodb://127.0.0.1:27017/wanderlust\').then(() => { console.log(\'MongoDB connection verified!\'); process.exit(0); }).catch(e => { console.error(e.message); process.exit(1); });"'
             }
         }
 
         stage('Health & Route Verification') {
             steps {
                 echo '====================================='
-                echo ' Stage 5: Health Check & Route Verification'
+                echo ' Stage 5: Health & Route Verification'
                 echo '====================================='
                 bat 'node -e "const http=require(\'http\'); http.get(\'http://localhost:8000/listings\', r => { console.log(\'Wanderlust HTTP Status:\', r.statusCode); if(r.statusCode !== 200) process.exit(1); }).on(\'error\', e => { console.error(\'Error:\', e.message); process.exit(1); });"'
             }
@@ -67,14 +63,16 @@ pipeline {
     }
 
     post {
+        always {
+            echo 'CI/CD Pipeline execution finished.'
+        }
         success {
             echo '====================================================='
             echo ' [SUCCESS] Jenkins CI/CD Pipeline Completed Successfully!'
             echo ' Project: WanderLust Travel & Tourism'
-            echo ' Web Application: http://localhost:8000/listings'
-            echo ' Default Admin Login: admin / admin123'
-            echo ' Health & Route Verification: PASSED (200 OK)'
-            echo ' Docker Containers: wanderlust_app & wanderlust_mongo'
+            echo ' Repository: https://github.com/Rahulkumar18-11/Wonderlust'
+            echo ' Live Application: http://localhost:8000/listings'
+            echo ' All Stages: PASSED'
             echo '====================================================='
         }
         failure {
@@ -84,4 +82,3 @@ pipeline {
         }
     }
 }
-
