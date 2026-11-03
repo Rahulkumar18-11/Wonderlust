@@ -29,7 +29,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 
-const dbUrl = process.env.ATLASDB_URL;
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
     .then(() => {
@@ -46,7 +46,7 @@ async function main() {
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     crypto: {
-        secret: process.env.SECRET,
+        secret: process.env.SECRET || "wanderlustsecretkey123",
     },
     touchAfter: 24 * 2600,
 });
@@ -57,7 +57,7 @@ store.on("error", (err) => {
 
 const sessionOptions = {
     store,
-    secret: process.env.SECRET,
+    secret: process.env.SECRET || "wanderlustsecretkey123",
     resave: false,
     saveUninitialized: true,
     cookie: {
